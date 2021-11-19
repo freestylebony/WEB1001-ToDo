@@ -42,6 +42,9 @@ namespace ToDo.Controllers
                 context.Add(item);
                 await context.SaveChangesAsync();
 
+                //display a success message after adding
+                TempData["Success"] = "TODO item added successfully";
+
                 //redirect back to index page
                 return RedirectToAction("Index");
 
@@ -50,6 +53,39 @@ namespace ToDo.Controllers
             return View(item);
         }
 
+        //GET edit todo
 
+        public async Task<ActionResult> Edit(int id)
+        {
+            Todo item = await context.ToDo.FindAsync(id);
+            if(item == null)
+            {
+                return NotFound();
+            }
+
+            return View(item);
+        }
+
+        //POST edit todo 
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Edit(Todo item)
+        {
+            if (ModelState.IsValid)
+            {
+                context.Update(item);
+                await context.SaveChangesAsync();
+                //display a success message after editing
+                TempData["Success"] = "TODO item updated successfully";
+
+                //redirect back to index page
+                return RedirectToAction("Index");
+
+            }
+
+            return View(item);
+        }
     }
 }
