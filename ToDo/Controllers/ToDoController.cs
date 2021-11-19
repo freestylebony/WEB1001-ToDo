@@ -31,5 +31,25 @@ namespace ToDo.Controllers
 
         //GET create todo
         public IActionResult Create() => View();
+
+        //POST Create todo
+          [HttpPost]
+          [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Create(Todo item)
+        {
+            if (ModelState.IsValid)
+            {
+                context.Add(item);
+                await context.SaveChangesAsync();
+
+                //redirect back to index page
+                return RedirectToAction("Index");
+
+            }
+
+            return View(item);
+        }
+
+
     }
 }
