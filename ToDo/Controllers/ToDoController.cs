@@ -87,5 +87,25 @@ namespace ToDo.Controllers
 
             return View(item);
         }
+
+        //GET delete todo
+
+        public async Task<ActionResult> Delete(int id)
+        {
+            Todo item = await context.ToDo.FindAsync(id);
+            if (item == null)
+            {
+                TempData["Error"] = "TODO item does not exist";
+            }else
+            {
+                context.ToDo.Remove(item);
+                await context.SaveChangesAsync();
+
+                TempData["Success"] = "TODO item successfully deleted";
+            }
+
+            //redirect back to index page
+            return RedirectToAction("Index");
+        }
     }
 }
